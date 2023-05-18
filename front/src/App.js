@@ -1,25 +1,48 @@
+import { useState } from 'react';
 import './App.css';
+
+let inicialState = [
+  {
+    id: 1,
+    descricao: 'Primeira Atividade'
+  },
+  {
+    id: 2,
+    descricao: 'Segunda Atividade'
+  }
+];
 
 function App() {
 
-  const atividades = [
-    {
-      id: 1,
-      descricao: 'Primeira Atividade'
-    }
-  ]
+  const [atividades, setAtividades] = useState(inicialState)
+
+  function addAtividade(e) {
+    e.preventDefault();
+
+    var atividade = {
+      id: document.getElementById('id').value,
+      descricao: document.getElementById('descricao').value
+    };
+
+    setAtividades([...atividades, { ...atividade}]);
+  }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <ul>
-          <li>{atividades[0].id} {atividades[0].descricao}</li>
-          <li onClick={() => alert("JSX")} >Segunda Atividade</li>
-          <li>Terceira Atividade</li>
-          <li>Quarta Atividade</li>
-        </ul>
-      </header>
-    </div>
+
+    <>
+      <form>
+        <input id="id" type="text" placeholder="id"/>
+        <input id="descricao" type="text" placeholder="descricao" />
+        <button onClick={addAtividade} >+ Atividade</button>
+      </form>
+      <div className="mt-3">      
+          <ul className="list-group">
+            {atividades.map(ativ => (
+              <li key={ativ.id} className="list-group-item">{ativ.id} - {ativ.descricao}</li>
+            ))}          
+          </ul>
+      </div>
+    </>
   );
 }
 

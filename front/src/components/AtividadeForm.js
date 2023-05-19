@@ -1,20 +1,40 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
+
+const atividadeInicial = {
+    id: 0,
+    titulo: '',
+    prioridade: 0,
+    descricao: ''
+}
 
 export default function AtividadeForm(props) {
 
-    const [atividade, setAtividade] = useState({});
+    const [atividade, setAtividade] = useState(atividadeAtual());
+
+    useEffect(() => {   
+        if (props.atividadeSelecionada.id != 0) {
+            setAtividade(props.atividadeSelecionada);
+        }
+    }, [props.atividadeSelecionada]);
 
     const inputTextHandler = (e) => {
-        const {name, value} = e.target;
-        
-        setAtividade({ ...atividade, [name]: value})
+        const { name, value } = e.target;
+
+        setAtividade({ ...atividade, [name]: value })
     }
 
-    //Math.max.apply(Math, props.atividades.map(item => item.id)) + 1
+    function atividadeAtual() {
+        if (props.atividadeSelecionada.id != 0) {
+            return props.atividadeSelecionada;
+        }
+        else {
+            return atividadeInicial;
+        }
+    }
 
     return (
         <form className="row g-3">
-            <div className="col-md-6">
+            {/* <div className="col-md-6">
                 <label className="form-label">Id</label>
                 <input 
                     type="text"
@@ -23,7 +43,12 @@ export default function AtividadeForm(props) {
                     id="id"
                     onChange={inputTextHandler}
                     value={atividade.id} />
+            </div> */}
+            <div className="col-md-6">
+                <label className="form-label">Título</label>
+                <input type="text" className="form-control" id="titulo" name='titulo' value={atividade.titulo} onChange={inputTextHandler} />
             </div>
+
             <div className="col-md-6">
                 <label className="form-label">Prioridade</label>
                 <select id="prioridade" className="form-select" name='prioridade' value={atividade.prioridade} onChange={inputTextHandler}>
@@ -34,14 +59,9 @@ export default function AtividadeForm(props) {
                 </select>
             </div>
 
-            <div className="col-md-6">
-                <label className="form-label">Título</label>
-                <input type="text" className="form-control" id="titulo" name='titulo' value={atividade.titulo} onChange={inputTextHandler} />
-            </div>
-
-            <div className="col-md-6">
+            <div className="col-md-12">
                 <label className="form-label">Descrição</label>
-                <input type="text" className="form-control" id="descricao" name='descricao' value={atividade.descricao} onChange={inputTextHandler} />
+                <textarea type="text" className="form-control" id="descricao" name='descricao' value={atividade.descricao} onChange={inputTextHandler} />
             </div>
 
             <hr />

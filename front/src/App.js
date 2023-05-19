@@ -27,7 +27,7 @@ function App() {
     e.preventDefault();
 
     var atividade = {
-      id: document.getElementById('id').value,
+      id: Math.max.apply(Math, atividades.map(item => item.id)) + 1,
       prioridade: document.getElementById('prioridade').value,
       titulo: document.getElementById('titulo').value,
       descricao: document.getElementById('descricao').value
@@ -43,8 +43,8 @@ function App() {
   }
 
   function pegarAtividade(id) {
-    const atividade = atividades.filter(a => a.id == id)
-    setAtividades(atividade[0]);
+    const atividade = atividades.filter((a) => a.id == id)
+    setAtividade(atividade[0]);
   }
 
   return (

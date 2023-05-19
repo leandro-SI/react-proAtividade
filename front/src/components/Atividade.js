@@ -53,7 +53,9 @@ export default function Atividade(props) {
                 </div>
                 <p className="card-text">{props.ativ.descricao}</p>
                 <div className='d-flex justify-content-end pt-2 m-0 border-top'>
-                    <button className='btn btn-sm btn-outline-primary me-2' title='Editar o Card'>
+                    <button className='btn btn-sm btn-outline-primary me-2' title='Editar o Card'
+                        onClick={() => props.pegarAtividade(props.ativ.id)}
+                    >
                         <i className='fas fa-pen me-2'></i>
                         Editar
                     </button>

@@ -1,16 +1,13 @@
 import React from 'react'
+import Badge from 'react-bootstrap/Badge';
 
 export default function Atividade(props) {
     function prioridadeLabel(param) {
         switch (param) {
-            case '1':
-                return 'Baixa';
-                break;
-            case '2':
-                return 'normal';
-                break;
-            case '3':
-                return 'Alta';
+            case 'Baixa':
+            case 'Normal':
+            case 'Alta':
+                return param;
                 break;
             default:
                 return 'Não Definido';
@@ -20,13 +17,13 @@ export default function Atividade(props) {
 
     function prioridadeStyle(param, icone) {
         switch (param) {
-            case '1':
+            case 'Baixa':
                 return icone ? 'smile' : 'success';
                 break;
-            case '2':
+            case 'Normal':
                 return icone ? 'meh' : 'dark';
                 break;
-            case '3':
+            case 'Alta':
                 return icone ? 'frown' : 'warning';
                 break;
             default:
@@ -40,7 +37,8 @@ export default function Atividade(props) {
             <div className="card-body">
                 <div className='d-flex justify-content-between'>
                     <h5 className='card-title'>
-                        <span className="badge text-bg-secondary me-1">{props.ativ.id}</span>
+                        {/* <span className="badge text-bg-secondary me-1">{props.ativ.id}</span> */}
+                        <span className='text-bg-secondary  me-1'><Badge bg="secondary">{props.ativ.id}</Badge></span>
                         - {props.ativ.titulo}
                     </h5>
                     <h6>
@@ -60,7 +58,7 @@ export default function Atividade(props) {
                         Editar
                     </button>
                     <button className='btn btn-sm btn-outline-danger' title='Deletar o Card'
-                        onClick={() => props.deletarAtividade(props.ativ.id)}>
+                        onClick={() => props.handleConfirmModal(props.ativ.id)}>
                         <i className='fas fa-trash me-2'></i>
                         Deletar
                     </button>

@@ -36,9 +36,12 @@ namespace ProAtividade.API.Controllers
         public Atividade Post([FromBody] Atividade atividade)
         {
             _dataContext.Atividades.Add(atividade);
-            _dataContext.SaveChanges();
 
-            return atividade;
+            if (_dataContext.SaveChanges() > 0)
+                return atividade;
+            else
+                throw new Exception("Erro ao adicionar Atividade.");
+
         }
 
         [HttpPut("{id}")]
@@ -54,7 +57,7 @@ namespace ProAtividade.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public string Delete(long id)
+        public bool Delete(long id)
         {
             var atividade = _dataContext.Atividades.FirstOrDefault(a => a.Id == id);
 
@@ -62,10 +65,10 @@ namespace ProAtividade.API.Controllers
             {
                 _dataContext.Atividades.Remove(atividade);
                 _dataContext.SaveChanges();
-                return "Deletado.";
+                return true;
             }
 
-            return "Não Deletado";
+            return false;
         }
     }
 }

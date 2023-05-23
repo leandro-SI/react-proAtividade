@@ -8,7 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using ProAtividade.API.Data;
+using ProAtividade.Data.Repositories;
+using ProAtividade.Domain.Interfaces.Repositories;
+using ProAtividade.Domain.Interfaces.Services;
+using ProAtividade.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +32,12 @@ namespace ProAtividade.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(opt => opt.UseSqlite(Configuration.GetConnectionString("Default")));
+            services.AddDbContext<Data.DataContext>(opt => opt.UseSqlite(Configuration.GetConnectionString("Default")));
+
+            services.AddScoped<IAtividadeService, AtividadeService>();
+            services.AddScoped<IAtividadeRepo, AtividadeRepositorio>();
+            services.AddScoped<IGeralRepo, GeralRepositorio>();
+
             services.AddControllers()
                 .AddJsonOptions(opt =>
                 {
@@ -43,7 +51,7 @@ namespace ProAtividade.API
                     Version = "v1",
                     Contact = new OpenApiContact
                     {
-                        Name = "Leandro Cesar",
+                        Name = "Leandro Cesar de Almeida",
                         Email = "leandro.almeida@uvvnet.com.br"
                     }
                 });

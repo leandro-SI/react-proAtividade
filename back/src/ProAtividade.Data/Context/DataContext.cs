@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProAtividade.API.Models;
+using ProAtividade.Data.Mappings;
+using ProAtividade.Domain.Entities;
 
 namespace ProAtividade.API.Data
 {
@@ -11,5 +12,10 @@ namespace ProAtividade.API.Data
         }
 
         public DbSet<Atividade> Atividades { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new AtividadeMap());
+        }
     }
 }

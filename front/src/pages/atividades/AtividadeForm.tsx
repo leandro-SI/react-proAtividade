@@ -1,58 +1,64 @@
 import React, { useEffect, useState } from 'react';
+import { IAtividade, PrioridadeEnum } from '../../models/atividade';
+import { AtividadeFormProps } from '../../models/atividadesProps';
 
-const atividadeInicial = {
+const atividadeInicial: IAtividade = {
     id: 0,
     titulo: '',
-    prioridade: 0,
+    prioridade: PrioridadeEnum.NaoDefinido,
     descricao: ''
 }
 
-export default function AtividadeForm(props) {
+const AtividadeForm: React.FC<AtividadeFormProps> = ({
+    atividadeSelecionada,
+    atualizarAtividade,
+    addAtividade,
+    cancelarAtividade }: AtividadeFormProps) => {
 
-    const [atividade, setAtividade] = useState(atividadeAtual());
+    const [atividade, setAtividade] = useState<IAtividade>(atividadeAtual());
 
     useEffect(() => {
-        if (props.atividadeSelecionada.id != 0) {
-            setAtividade(props.atividadeSelecionada);
+        if (atividadeSelecionada.id != 0) {
+            setAtividade(atividadeSelecionada);
         }
-    }, [props.atividadeSelecionada]);
+    }, [atividadeSelecionada]);
 
-    const inputTextHandler = (e) => {
+    const handlerValue = (e: any) => {
         const { name, value } = e.target;
 
         setAtividade({ ...atividade, [name]: value })
     }
 
-    function atividadeAtual() {
-        if (props.atividadeSelecionada.id != 0) {
-            return props.atividadeSelecionada;
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (atividadeSelecionada.id != 0) {
+            atualizarAtividade(atividade);
+        }
+        else {
+            addAtividade(atividade);
+        }
+
+        setAtividade(atividadeInicial);
+
+    }
+
+    const handlerCancelar = (e: React.FormEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        cancelarAtividade();
+
+        setAtividade(atividadeInicial);
+
+    }
+
+    function atividadeAtual(): IAtividade {
+        if (atividadeSelecionada.id != 0) {
+            return atividadeSelecionada;
         }
         else {
             return atividadeInicial;
         }
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (props.atividadeSelecionada.id != 0) {
-            props.atualizarAtividade(atividade);
-        }
-        else {
-            props.addAtividade(atividade);
-        }
-
-        setAtividade(atividadeInicial);
-
-    }
-
-    const handlerCancelar = (e) => {
-        e.preventDefault();
-
-        props.cancelarAtividade();
-
-        setAtividade(atividadeInicial);
-
     }
 
     return (
@@ -65,17 +71,17 @@ export default function AtividadeForm(props) {
                     className="form-control"
                     name='id'
                     id="id"
-                    onChange={inputTextHandler}
+                    onChange={handlerValue}
                     value={atividade.id} />
             </div> */}
                 <div className="col-md-6">
                     <label className="form-label">Título</label>
-                    <input type="text" className="form-control" id="titulo" name='titulo' value={atividade.titulo} onChange={inputTextHandler} />
+                    <input type="text" className="form-control" id="titulo" name='titulo' value={atividade.titulo} onChange={handlerValue} />
                 </div>
 
                 <div className="col-md-6">
                     <label className="form-label">Prioridade</label>
-                    <select id="prioridade" className="form-select" name='prioridade' value={atividade.prioridade} onChange={inputTextHandler}>
+                    <select id="prioridade" className="form-select" name='prioridade' value={atividade.prioridade} onChange={handlerValue}>
                         <option defaultValue="0">Selecionar...</option>
                         <option value="Baixa">Baixa</option>
                         <option value="Normal">Normal</option>
@@ -85,12 +91,11 @@ export default function AtividadeForm(props) {
 
                 <div className="col-md-12">
                     <label className="form-label">Descrição</label>
-                    <textarea type="text" className="form-control" id="descricao" name='descricao' value={atividade.descricao} onChange={inputTextHandler} />
+                    <textarea className="form-control" id="descricao" name='descricao' value={atividade.descricao} onChange={handlerValue} />
                     <hr />
                 </div>
 
                 <div className='col-12 mt-0'>
-                    {console.log('Atividade', atividade.id)}
                     {
 
                         atividade.id == 0
@@ -113,3 +118,5 @@ export default function AtividadeForm(props) {
         </>
     )
 }
+
+export default AtividadeForm;

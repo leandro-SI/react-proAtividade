@@ -8,20 +8,23 @@ import PageNotFound from './pages/PageNotFound';
 import { Routes } from 'react-router-dom';
 
 
-
-export default function App() {
+const App = () => {
 
     return (
         <Routes>
             <Route path='/' element={<Dashboard />} />
-            <Route path='/atividade/lista' element={<Atividade />} />
-            <Route path='/cliente/lista' element={<Cliente />} />
+            <Route path='/atividade/*' element={<Atividade />} />
+            <Route path='/atividade/:id/cliente' element={<Atividade />} />
+            <Route path='/cliente/*' element={<Cliente />} />
+            <Route path='/cliente/:id/atividade' element={<Cliente />} />
             <Route path='/cliente/detalhe/' element={<ClienteForm />} />
             <Route path='/cliente/detalhe/:id' element={<ClienteForm />} />
             <Route path='/*' element={<PageNotFound />} />
         </Routes>
     );
 }
+
+export default App;
 
 // const Home = () => (
 //     <div>

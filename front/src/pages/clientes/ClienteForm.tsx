@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/esm/Button'
 import { useNavigate, useParams } from 'react-router-dom';
 
 
-export default function ClienteForm() {
+const ClienteForm = () => {
 
     const navigate = useNavigate();
     let { id } = useParams();
@@ -25,3 +25,5 @@ export default function ClienteForm() {
         </>
     )
 }
+
+export default ClienteForm;

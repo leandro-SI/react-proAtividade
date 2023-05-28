@@ -2,7 +2,7 @@ import React from 'react'
 import TitlePage from '../../components/TitlePage'
 import { Card, Row, Col } from 'react-bootstrap';
 
-export default function dashboard() {
+const dashboard = () => {
     return (
         <>
             <TitlePage title='Dashboard' />
@@ -55,3 +55,5 @@ export default function dashboard() {
         </>
     )
 }
+
+export default dashboard;

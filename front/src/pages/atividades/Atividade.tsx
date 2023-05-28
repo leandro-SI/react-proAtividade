@@ -5,6 +5,7 @@ import api from '../../api/atividade';
 import TitlePage from '../../components/TitlePage';
 import AtividadeLista from './AtividadeLista';
 import AtividadeForm from './AtividadeForm';
+import { IAtividade, PrioridadeEnum } from '../../models/atividade';
 
 let inicialState = [
     {
@@ -21,25 +22,32 @@ let inicialState = [
     }
 ];
 
-function Atividade() {
+const atividadeInicial: IAtividade = {
+    id: 0,
+    titulo: '',
+    prioridade: PrioridadeEnum.NaoDefinido,
+    descricao: ''
+}
+
+const Atividade = () => {
 
     const [showAtividadeModal, setShowAtividadeModal] = useState(false);
     const [smShowConfirmmModal, setSmShowConfirmmModal] = useState(false);
 
-    const [atividades, setAtividades] = useState([]);
-    const [atividade, setAtividade] = useState({ id: 0 });
+    const [atividades, setAtividades] = useState<IAtividade[]>([]);
+    const [atividade, setAtividade] = useState<IAtividade>(atividadeInicial);
 
     const handleAtividadeModal = () => setShowAtividadeModal(!showAtividadeModal)
 
-    const handleConfirmModal = (id) => {
+    const handleConfirmModal = (id: number) => {
 
         if (id != 0 && id != undefined) {
-            const atividade = atividades.filter((a) => a.id == id)
+            const atividade = atividades.filter((a) => a.id === id)
             setAtividade(atividade[0]);
 
         }
         else {
-            setAtividade({ id: 0 });
+            setAtividade(atividadeInicial);
         }
         setSmShowConfirmmModal(!smShowConfirmmModal);
     };
@@ -50,7 +58,7 @@ function Atividade() {
     }
 
     const novaAtividade = () => {
-        setAtividade({ id: 0 });
+        setAtividade(atividadeInicial);
         handleAtividadeModal();
     }
 
@@ -62,27 +70,27 @@ function Atividade() {
         getAtividades();
     }, [])
 
-    const addAtividade = async (ativ) => {
+    const addAtividade = async (ativ: IAtividade) => {
         handleAtividadeModal();
         const response = await api.post('Atividade', ativ);
         setAtividades([...atividades, response.data]);
     };
 
     function cancelarAtividade() {
-        setAtividade({ id: 0 });
+        setAtividade(atividadeInicial);
         handleAtividadeModal();
     }
 
-    const atualizarAtividade = async (ativ) => {
+    const atualizarAtividade = async (ativ: IAtividade) => {
         handleAtividadeModal();
         const response = await api.put(`Atividade/${ativ.id}`, ativ);
         const { id } = response.data;
 
         setAtividades(atividades.map((item) => item.id == id ? response.data : item));
-        setAtividade({ id: 0 });
+        setAtividade(atividadeInicial);
     }
 
-    const deletarAtividade = async (id) => {
+    const deletarAtividade = async (id: number) => {
         handleConfirmModal(0);
         const response = await api.delete(`Atividade/${id}`);
 
@@ -92,7 +100,7 @@ function Atividade() {
         }
     };
 
-    function pegarAtividade(id) {
+    function pegarAtividade(id: number) {
         const atividade = atividades.filter((a) => a.id == id)
         setAtividade(atividade[0]);
 
@@ -104,7 +112,7 @@ function Atividade() {
         <>
 
             <TitlePage
-                novaAtividade={novaAtividade}
+                // novaAtividade={novaAtividade}
                 title={'Atividade ' + (atividade.id != 0 ? atividade.id : '')}
             >
                 <Button variant="outline-secondary" onClick={novaAtividade}>
@@ -128,15 +136,13 @@ function Atividade() {
                         cancelarAtividade={cancelarAtividade}
                         atualizarAtividade={atualizarAtividade}
                         atividadeSelecionada={atividade}
-                        atividades={atividades}
                     />
                 </Modal.Body>
             </Modal>
 
-            <Modal
-                size='sm-2'
+            <Modal className='sm-2'
                 show={smShowConfirmmModal}
-                onHide={handleConfirmModal}
+                hide={handleConfirmModal}
             >
                 <Modal.Header closeButton>
                     <Modal.Title>
